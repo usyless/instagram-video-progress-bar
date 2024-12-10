@@ -38,29 +38,29 @@
                         updateBar(newTime);
                     }
 
-                    let pauseTimeout = null;
+                    let pauseTimeout = null, paused = false;
                     const pauseReel = reel.pause.bind(reel);
-                    barBoxContainer.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        clearTimeout(pauseTimeout);
-                        reel.play();
-                        updateBarFromMouse(e);
-                    });
-
                     barBoxContainer.addEventListener('pointerdown', (e) => {
-                        pauseTimeout = setTimeout(pauseReel, 50);
+                        e.preventDefault();
+                        paused = reel.paused;
+                        if (!paused) pauseTimeout = setTimeout(pauseReel, 150);
                         updateBarFromMouse(e);
                         holding = true;
-                    }, {passive: true});
+                    });
                     barBoxContainer.addEventListener('pointermove', (e) => {
                         if (holding) {
                             e.preventDefault();
                             updateBarFromMouse(e);
                         }
                     });
-                    const stopHold = () => {
-                        reel.play();
-                        holding = false;
+                    const stopHold = (e) => {
+                        if (holding) {
+                            e.preventDefault();
+                            clearTimeout(pauseTimeout);
+                            if (!paused) reel.play();
+                            holding = false;
+                            updateBarFromMouse(e);
+                        }
                     }
                     barBoxContainer.addEventListener('pointerup', stopHold);
                     barBoxContainer.addEventListener('pointerleave', stopHold);
