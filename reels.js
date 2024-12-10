@@ -1,6 +1,7 @@
 'use strict';
 
 (async () => {
+    const Settings = await getSettings();
     let holding = false;
 
     class Reel {
@@ -9,25 +10,31 @@
                 if (reel.readyState === 4) {
                     reel.setAttribute('usy-progress-bar', '');
                     const dur = reel.duration;
+                    const updaters = []
 
                     const barBoxContainer = document.createElement('div');
                     barBoxContainer.classList.add('usy-progress-bar-container');
 
                     const bar = document.createElement('div');
                     bar.classList.add('usy-progress-bar');
+                    if (!Settings.preferences.show_bar) bar.classList.add('usy-progress-bar-hidden');
+                    barBoxContainer.appendChild(bar);
+                    updaters.push((time) => bar.style.width = `${(time / dur) * 100}%`);
 
-                    const time = document.createElement('div');
-                    time.classList.add('usy-time-count');
-                    const timeNode = document.createTextNode(Utils.formatTime(0));
-                    time.append(timeNode, document.createTextNode(' / '),
-                        document.createTextNode(Utils.formatTime(dur)));
+                    if (Settings.preferences.show_time) {
+                        const time = document.createElement('div');
+                        time.classList.add('usy-time-count');
+                        const timeNode = document.createTextNode(Utils.formatTime(0));
+                        time.append(timeNode, document.createTextNode(' / '),
+                            document.createTextNode(Utils.formatTime(dur)));
+                        barBoxContainer.appendChild(time);
+                        updaters.push((time) => timeNode.textContent = Utils.formatTime(time));
+                    }
 
-                    barBoxContainer.append(bar, time);
                     reel.after(barBoxContainer);
 
                     const updateBar = (time) => {
-                        bar.style.width = `${(time / dur) * 100}%`;
-                        timeNode.textContent = Utils.formatTime(time);
+                        for (const u of updaters) u(time);
                     }
 
                     reel.addEventListener('timeupdate', () => updateBar(reel.currentTime));
@@ -74,6 +81,24 @@
             time = parseInt(time);
             return `${Math.floor(time / 60).toString().padStart(2, '0')}:${(time % 60).toString().padStart(2, '0')}`;
         }
+    }
+
+    async function getSettings() { // Setting handling
+        class Settings {
+            preferences = {
+                show_time: true,
+                show_bar: true,
+            }
+
+            async loadSettings() {
+                const data = await chrome.storage.local.get(), settings = ['preferences'];
+                for (const setting of settings) for (const s in this[setting]) this[setting][s] = data[s] ?? this[setting][s];
+            }
+        }
+
+        const set = new Settings();
+        await set.loadSettings();
+        return set;
     }
 
     setInterval(Reel.addProgressBars, 1000);

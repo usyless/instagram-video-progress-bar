@@ -25,6 +25,10 @@
         }
     }
 
+    &:not(:hover) .usy-progress-bar-hidden {
+        opacity: 0;
+    }
+
     .usy-progress-bar {
         position: absolute;
         bottom: 0;

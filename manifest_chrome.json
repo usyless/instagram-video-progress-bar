@@ -11,6 +11,10 @@
       "96": "icons/icon-96.png"
     },
 
+    "permissions": [
+      "storage"
+    ],
+
     "content_scripts": [
       {
         "matches": ["https://www.instagram.com/reels/*"],
@@ -18,5 +22,14 @@
         "css": ["reels.css"],
         "run_at": "document_idle"
       }
-    ]
+    ],
+    "options_ui": {
+      "page": "settings/settings.html",
+      "open_in_tab": false
+    },
+    "action": {
+      "default_icon": "icons/icon-96.png",
+      "default_title": "Settings",
+      "default_popup": "popup/popup.html"
+    }
 }
