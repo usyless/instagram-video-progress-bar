@@ -1,6 +1,8 @@
 'use strict';
 
 (async () => {
+    let holding = false;
+
     class Reel {
         static addProgressBars() {
             for (const reel of document.body.querySelectorAll('video:not([usy-progress-bar])')) {
@@ -22,18 +24,46 @@
 
                     barBoxContainer.append(bar, time);
                     reel.after(barBoxContainer);
-                    reel.addEventListener('timeupdate', () => {
-                        const curr = reel.currentTime;
-                        bar.style.width = `${(curr / dur) * 100}%`;
-                        timeNode.textContent = Utils.formatTime(curr);
+
+                    const updateBar = (time) => {
+                        bar.style.width = `${(time / dur) * 100}%`;
+                        timeNode.textContent = Utils.formatTime(time);
+                    }
+
+                    reel.addEventListener('timeupdate', () => updateBar(reel.currentTime));
+
+                    const updateBarFromMouse = (e) => {
+                        const newTime = Math.max(0, Math.min(((e.clientX - barBoxContainer.getBoundingClientRect().left) / barBoxContainer.offsetWidth) * dur, dur));
+                        reel.currentTime = newTime;
+                        updateBar(newTime);
+                    }
+
+                    let pauseTimeout = null;
+                    const pauseReel = reel.pause.bind(reel);
+                    barBoxContainer.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        clearTimeout(pauseTimeout);
+                        reel.play();
+                        updateBarFromMouse(e);
                     });
 
-                    barBoxContainer.addEventListener('click', (e) => {
-                        const newTime = ((e.clientX - barBoxContainer.getBoundingClientRect().left) / barBoxContainer.offsetWidth) * dur
-                        reel.currentTime = newTime;
-                        bar.style.width = `${(newTime / dur) * 100}%`;
-                        timeNode.textContent = Utils.formatTime(newTime);
+                    barBoxContainer.addEventListener('pointerdown', (e) => {
+                        pauseTimeout = setTimeout(pauseReel, 50);
+                        updateBarFromMouse(e);
+                        holding = true;
+                    }, {passive: true});
+                    barBoxContainer.addEventListener('pointermove', (e) => {
+                        if (holding) {
+                            e.preventDefault();
+                            updateBarFromMouse(e);
+                        }
                     });
+                    const stopHold = () => {
+                        reel.play();
+                        holding = false;
+                    }
+                    barBoxContainer.addEventListener('pointerup', stopHold);
+                    barBoxContainer.addEventListener('pointerleave', stopHold);
                 }
             }
         }
