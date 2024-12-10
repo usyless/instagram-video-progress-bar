@@ -1,11 +1,11 @@
 {
     "manifest_version": 3,
-    "name": "Instagram Progress Bar",
+    "name": "Instagram Video Progress Bar",
     "version": "0.1",
     "author": "usy",
     "homepage_url": "https://github.com/usyless/instagram-reels-progress-bar",
   
-    "description": "Adds progress bar to Instagram reels",
+    "description": "Adds progress bars to videos on Instagram",
   
     "icons": {
       "96": "icons/icon-96.png"
