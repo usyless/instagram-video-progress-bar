@@ -34,10 +34,6 @@
                         bar.style.width = `${(newTime / dur) * 100}%`;
                         timeNode.textContent = Utils.formatTime(newTime);
                     });
-
-                    barBoxContainer.addEventListener('pointerenter', () => {
-
-                    });
                 }
             }
         }
