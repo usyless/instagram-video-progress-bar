@@ -39,7 +39,7 @@
         width: 0;
         z-index: 9999999999999;
         background-color: white;
-        transition: width 0.2s, height 0.2s, opacity 0.2s;
+        transition: width 250ms, height 0.2s, opacity 0.2s;
 
         border-width: 0;
         border-style: solid;
@@ -60,7 +60,11 @@
             position: absolute;
             bottom: 0;
             pointer-events: none;
-            transition: width 0.2s, height 0.2s, opacity 0.2s;
+            transition: width 250ms, height 0.2s, opacity 0.2s;
+        }
+
+        &.usy-holding, &.usy-holding::after {
+            transition: width 0s, height 0.2s, opacity 0.2s;
         }
     }
 

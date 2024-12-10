@@ -32,6 +32,7 @@
 
             const updateBar = (time) => {
                 for (const u of updaters) u(time);
+                if (!holding) bar.classList.remove('usy-holding');
             }
 
             reel.addEventListener('timeupdate', () => updateBar(reel.currentTime));
@@ -48,8 +49,9 @@
                 e.preventDefault();
                 paused = reel.paused;
                 if (!paused) pauseTimeout = setTimeout(pauseReel, 150);
-                updateBarFromMouse(e);
+                bar.classList.add('usy-holding');
                 holding = true;
+                updateBarFromMouse(e);
             });
             barBoxContainer.addEventListener('pointermove', (e) => {
                 if (holding) {
@@ -62,8 +64,8 @@
                     e.preventDefault();
                     clearTimeout(pauseTimeout);
                     if (!paused) reel.play();
-                    holding = false;
                     updateBarFromMouse(e);
+                    holding = false;
                 }
             }
             barBoxContainer.addEventListener('pointerup', stopHold);
