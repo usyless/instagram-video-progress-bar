@@ -45,6 +45,18 @@
 
             let pauseTimeout = null, paused = false;
             const pauseReel = reel.pause.bind(reel);
+            const moveListener = (e) => {
+                e.preventDefault();
+                updateBarFromMouse(e);
+            }
+            const stopHold = (e) => {
+                e.preventDefault();
+                clearTimeout(pauseTimeout);
+                if (!paused) reel.play();
+                updateBarFromMouse(e);
+                holding = false;
+                document.removeEventListener('pointermove', moveListener);
+            }
             barBoxContainer.addEventListener('pointerdown', (e) => {
                 e.preventDefault();
                 paused = reel.paused;
@@ -52,24 +64,9 @@
                 bar.classList.add('usy-holding');
                 holding = true;
                 updateBarFromMouse(e);
+                document.addEventListener('pointerup', stopHold, {once: true});
+                document.addEventListener('pointermove', moveListener);
             });
-            barBoxContainer.addEventListener('pointermove', (e) => {
-                if (holding) {
-                    e.preventDefault();
-                    updateBarFromMouse(e);
-                }
-            });
-            const stopHold = (e) => {
-                if (holding) {
-                    e.preventDefault();
-                    clearTimeout(pauseTimeout);
-                    if (!paused) reel.play();
-                    updateBarFromMouse(e);
-                    holding = false;
-                }
-            }
-            barBoxContainer.addEventListener('pointerup', stopHold);
-            barBoxContainer.addEventListener('pointerleave', stopHold);
         }
 
         static addProgressBars() {

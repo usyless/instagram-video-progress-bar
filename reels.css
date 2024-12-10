@@ -15,7 +15,7 @@
     width: 100%;
     z-index: 9999999999999;
 
-    &:hover .usy-progress-bar {
+    &:hover .usy-progress-bar, .usy-progress-bar.usy-holding {
         height: 6px;
         opacity: 1;
 
