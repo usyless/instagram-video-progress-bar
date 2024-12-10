@@ -25,7 +25,7 @@
         }
     }
 
-    &:not(:hover) .usy-progress-bar-hidden {
+    &:not(:hover) .usy-progress-bar-hidden:not(.usy-holding) {
         opacity: 0;
     }
 
