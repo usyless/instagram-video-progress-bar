@@ -9,7 +9,7 @@ const options = {
         {
             name: 'show_time',
             description: "Show elapsed / total video time",
-            default: true
+            default: false
         },
         {
             name: 'show_bar',

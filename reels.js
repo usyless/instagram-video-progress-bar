@@ -86,7 +86,7 @@
     async function getSettings() { // Setting handling
         class Settings {
             preferences = {
-                show_time: true,
+                show_time: false,
                 show_bar: true,
             }
 
