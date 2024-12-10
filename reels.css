@@ -63,10 +63,10 @@
     .usy-time-count {
         position: absolute;
         right: 0;
-        top: -2.5em;
+        top: -2.45rem;
         width: 100%;
         text-align: right;
-        border-right: 10px;
+        border-right: 1rem;
         border-style: solid;
         border-color: transparent;
 
