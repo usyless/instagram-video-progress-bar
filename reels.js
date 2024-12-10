@@ -90,7 +90,7 @@
 
     {
         let lastUpdate = performance.now(), updateTimer = null;
-        const updateFunc = Video.addProgressBars, updateTime = 1000;
+        const updateFunc = Video.addProgressBars, updateTime = 500;
         const observerSettings = {subtree: true, childList: true};
         const observer = new MutationObserver((_, o) => {
             o.disconnect();
