@@ -87,10 +87,15 @@
     }
 
     {
+        let lastUpdate = performance.now(), updateTimer = null;
+        const updateFunc = Video.addProgressBars, updateTime = 1000;
         const observerSettings = {subtree: true, childList: true};
         const observer = new MutationObserver((_, o) => {
             o.disconnect();
-            Video.addProgressBars();
+            clearTimeout(updateTimer);
+            if (performance.now() - lastUpdate > updateTime) updateFunc();
+            else updateTimer = setTimeout(updateFunc, updateTime);
+            lastUpdate = performance.now();
             o.observe(document.body, observerSettings);
         });
         observer.observe(document.body, observerSettings);
