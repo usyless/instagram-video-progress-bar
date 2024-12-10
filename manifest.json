@@ -17,7 +17,7 @@
 
     "content_scripts": [
       {
-        "matches": ["https://www.instagram.com/reels/*"],
+        "matches": ["https://www.instagram.com/*"],
         "js": ["reels.js"],
         "css": ["reels.css"],
         "run_at": "document_idle"

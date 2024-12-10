@@ -69,10 +69,7 @@
         right: 0;
         top: -2.45rem;
         width: 100%;
-        text-align: right;
-        border-right: 1rem;
-        border-style: solid;
-        border-color: transparent;
+        text-align: center;
 
         pointer-events: none;
 

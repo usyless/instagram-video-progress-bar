@@ -1,6 +1,6 @@
-# Reels Progress Bar
+# Instagram video/reels Progress Bar
 
-Adds a progress bar to instagram reels
+Adds a progress bar to Instagram videos/reels
 
 **Screenshots available on the Mozilla addons page**
 
