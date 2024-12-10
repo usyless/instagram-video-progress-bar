@@ -52,10 +52,10 @@
             const stopHold = (e) => {
                 e.preventDefault();
                 clearTimeout(pauseTimeout);
+                document.removeEventListener('pointermove', moveListener);
                 if (!paused) reel.play();
                 updateBarFromMouse(e);
                 holding = false;
-                document.removeEventListener('pointermove', moveListener);
             }
             barBoxContainer.addEventListener('pointerdown', (e) => {
                 e.preventDefault();
