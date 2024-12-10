@@ -27,6 +27,17 @@
                         bar.style.width = `${(curr / dur) * 100}%`;
                         timeNode.textContent = Utils.formatTime(curr);
                     });
+
+                    barBoxContainer.addEventListener('click', (e) => {
+                        const newTime = ((e.clientX - barBoxContainer.getBoundingClientRect().left) / barBoxContainer.offsetWidth) * dur
+                        reel.currentTime = newTime;
+                        bar.style.width = `${(newTime / dur) * 100}%`;
+                        timeNode.textContent = Utils.formatTime(newTime);
+                    });
+
+                    barBoxContainer.addEventListener('pointerenter', () => {
+
+                    });
                 }
             }
         }
@@ -39,21 +50,5 @@
         }
     }
 
-    const observer = {
-        observer: null,
-        start: () => {
-            observer.observer?.disconnect();
-            const observerSettings = {subtree: true, childList: true},
-                callback = (_, o) => {
-                    o.disconnect();
-                    Reel.addProgressBars();
-                    o.observe(document.body, observerSettings);
-                };
-            observer.observer = new MutationObserver(callback);
-            observer.observer.observe(document.body, observerSettings);
-        }
-    }
-
-    // Starts extension
-    observer.start();
+    setInterval(Reel.addProgressBars, 1000);
 })();

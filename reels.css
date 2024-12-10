@@ -18,6 +18,11 @@
     &:hover .usy-progress-bar {
         height: 6px;
         opacity: 1;
+
+        &::after {
+            opacity: 0.2;
+            height: 6px;
+        }
     }
 
     .usy-progress-bar {
@@ -30,7 +35,7 @@
         width: 0;
         z-index: 9999999999999;
         background-color: white;
-        transition: width 0.4s ease-in-out, height 0.2s ease-in-out, opacity 0.2s linear;
+        transition: width 0.2s, height 0.2s, opacity 0.2s;
 
         border-width: 0;
         border-style: solid;
@@ -39,12 +44,26 @@
         border-color: transparent;
 
         opacity: 0.4;
+
+        &::after {
+            content: "";
+            width: 100vw;
+            background-color: white;
+            opacity: 0;
+            min-height: 3px;
+            height: 3px;
+            max-height: 6px;
+            position: absolute;
+            bottom: 0;
+            pointer-events: none;
+            transition: width 0.2s, height 0.2s, opacity 0.2s;
+        }
     }
 
     .usy-time-count {
         position: absolute;
         right: 0;
-        top: -3.9em;
+        top: -2.5em;
         width: 100%;
         text-align: right;
         border-right: 10px;
