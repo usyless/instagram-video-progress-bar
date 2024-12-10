@@ -7,7 +7,7 @@
     class Video {
         static addProgressBar(reel) {
             const dur = reel.duration;
-            const updaters = []
+            const updaters = [];
 
             const barBoxContainer = document.createElement('div');
             barBoxContainer.classList.add('usy-progress-bar-container');
