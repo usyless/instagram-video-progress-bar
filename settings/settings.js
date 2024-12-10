@@ -35,7 +35,6 @@ const options = {
 }
 const typeMap = {
     button: create_button,
-    info: create_info,
 }
 let values;
 for (const section in options) {
@@ -63,12 +62,6 @@ function create_button(e) {
     const [outer, button] = get_generic_setting(e, 'button');
     button.textContent = e.button;
     button.addEventListener('click', e.onclick);
-    return outer;
-}
-
-function create_info(e) {
-    const [outer, info] = get_generic_setting(e, 'span');
-    get_value(e.name, e.default).then(v => info.textContent = v);
     return outer;
 }
 
