@@ -59,6 +59,8 @@
             }
             barBoxContainer.addEventListener('pointerdown', (e) => {
                 e.preventDefault();
+                document.removeEventListener('pointermove', moveListener);
+                document.removeEventListener('pointerup', stopHold);
                 paused = reel.paused;
                 if (!paused) pauseTimeout = setTimeout(pauseReel, 150);
                 bar.classList.add('usy-holding');
