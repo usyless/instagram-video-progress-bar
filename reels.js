@@ -6,7 +6,7 @@
 
     class Video {
         static addProgressBar(reel) {
-            const dur = reel.duration;
+            let duration = reel.duration || 1;
             const updaters = [];
 
             const barBoxContainer = document.createElement('div');
@@ -16,29 +16,34 @@
             bar.classList.add('usy-progress-bar');
             if (!Settings.preferences.show_bar) bar.classList.add('usy-progress-bar-hidden');
             barBoxContainer.appendChild(bar);
-            updaters.push((time) => bar.style.width = `${(time / dur) * 100}%`);
+            updaters.push((time) => bar.style.width = `${(time / duration) * 100}%`);
 
             if (Settings.preferences.show_time) {
                 const time = document.createElement('div');
                 time.classList.add('usy-time-count');
                 const timeNode = document.createTextNode(Utils.formatTime(0));
-                time.append(timeNode, document.createTextNode(' / '),
-                    document.createTextNode(Utils.formatTime(dur)));
+                const durNode = document.createTextNode(Utils.formatTime(duration));
+                time.append(timeNode, document.createTextNode(' / '), durNode);
                 barBoxContainer.appendChild(time);
-                updaters.push((time) => timeNode.textContent = Utils.formatTime(time));
+                updaters.push((time) => {
+                    timeNode.textContent = Utils.formatTime(time);
+                    durNode.textContent = Utils.formatTime(duration);
+                });
             }
 
             reel.after(barBoxContainer);
 
-            const updateBar = (time) => {
+            const updateBar = () => {
+                duration = reel.duration;
+                const time = reel.currentTime;
                 for (const u of updaters) u(time);
                 if (!holding) bar.classList.remove('usy-holding');
             }
 
-            reel.addEventListener('timeupdate', () => updateBar(reel.currentTime));
+            reel.addEventListener('timeupdate', updateBar);
 
             const updateBarFromMouse = (e) => {
-                const newTime = Math.max(0, Math.min(((e.clientX - barBoxContainer.getBoundingClientRect().left) / barBoxContainer.offsetWidth) * dur, dur));
+                const newTime = Math.max(0, Math.min(((e.clientX - barBoxContainer.getBoundingClientRect().left) / barBoxContainer.offsetWidth) * duration, duration));
                 reel.currentTime = newTime;
                 updateBar(newTime);
             }
@@ -74,8 +79,7 @@
         static addProgressBars() {
             for (const reel of document.body.querySelectorAll('video:not([usy-progress-bar])')) {
                 reel.setAttribute('usy-progress-bar', '');
-                if (reel.readyState === 4) Video.addProgressBar(reel);
-                else reel.addEventListener('loadeddata', () => Video.addProgressBar(reel));
+                Video.addProgressBar(reel);
             }
         }
     }
