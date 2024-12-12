@@ -74,12 +74,21 @@
                 document.addEventListener('pointerup', stopHold, {once: true});
                 document.addEventListener('pointermove', moveListener);
             });
+
+            updateBar();
         }
 
         static addProgressBars() {
             for (const reel of document.body.querySelectorAll('video:not([usy-progress-bar])')) {
                 reel.setAttribute('usy-progress-bar', '');
                 Video.addProgressBar(reel);
+            }
+        }
+
+        static ClearAll() {
+            for (const reel of document.body.querySelectorAll('video[usy-progress-bar]')) {
+                reel.parentElement.querySelector('div.usy-progress-bar-container')?.remove();
+                reel.removeAttribute('usy-progress-bar');
             }
         }
     }
@@ -92,6 +101,7 @@
     }
 
     {
+        Video.ClearAll();
         let lastUpdate = performance.now(), updateTimer = null;
         const updateFunc = Video.addProgressBars, updateTime = 500;
         const observerSettings = {subtree: true, childList: true};
@@ -105,6 +115,13 @@
         });
         observer.observe(document.body, observerSettings);
     }
+
+    chrome.storage.onChanged.addListener(async (_, namespace) => {
+        if (namespace === 'local') {
+            await Settings.loadSettings();
+            Video.ClearAll();
+        }
+    });
 
     async function getSettings() { // Setting handling
         class Settings {

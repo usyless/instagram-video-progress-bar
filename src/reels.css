@@ -59,7 +59,7 @@
             height: 3px;
             max-height: 6px;
             position: absolute;
-            bottom: 0;
+            bottom: -1px;
             pointer-events: none;
             transition: width 250ms, height 0.2s, opacity 0.2s;
         }
