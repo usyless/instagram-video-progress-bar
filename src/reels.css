@@ -18,6 +18,7 @@
     &:hover .usy-progress-bar, .usy-progress-bar.usy-holding {
         height: 6px;
         opacity: 1;
+        border-color: lightgrey;
 
         &::after {
             opacity: 0.2;
@@ -39,13 +40,13 @@
         width: 0;
         z-index: 9999999999999;
         background-color: white;
-        transition: width 250ms, height 0.2s, opacity 0.2s;
+        transition: width 250ms, height 0.2s, opacity 0.2s, border 0.2s;
 
-        border-width: 0;
+        border-width: 1px;
         border-style: solid;
         border-top-right-radius: 3px;
         border-bottom-right-radius: 3px;
-        border-color: transparent;
+        border-color: white;
 
         opacity: 0.4;
 
